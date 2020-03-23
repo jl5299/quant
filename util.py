@@ -226,7 +226,7 @@ class StockSeries:
 
         jdate = ((data['Date'].dt.year -2000) * 1000) + data.Date.dt.dayofyear
         data['Julian'] = jdate
-        data['Day'] = data.Date.dt.weekday_name
+        data['Day'] = data.Date.dt.weekdayname
 
         # compute continuous growth rate returns for each trading day
         price = np.array(data.Close)
@@ -358,7 +358,7 @@ class StockSeries:
             prob = cumProb
 
         else:
-            print "Given option has invalid type. Received", optionType, "expected call or put"
+            print ("Given option has invalid type. Received", optionType, "expected call or put")
             exit(1)
 
         return prob
@@ -484,7 +484,7 @@ class StockSeries:
         volgrid = pd.DataFrame(finData)
         volgrid.index = rowtitles
         volgrid.columns = coltitles
-        print volgrid
+        print (volgrid)
 
     def save_data_vol(self, fname):
         coltitles = ['Volatility','MaxSigma','MinSigma','Drift']
@@ -545,15 +545,15 @@ class Option:
 
 
 if __name__ == '__main__':
-    print "Running tests:"
+    print ("Running tests:")
     print
 
-    stock = StockSeries(stocksym="WMT")
-    print "symbol is:", stock.get_stocksym()
+    stock = StockSeries(stocksym="SPY")
+    print ("symbol is:", stock.get_stocksym())
 
-    print "testing get data"
+    print ("testing get data")
 
-    stock.lookup_stock_data('7cy5HU13M48ssSdyb4Lx')
+    stock.lookup_stock_data('ivL1Kde1BF8NVaGeoEGq')
 
     stock.comp_cgr()
 
@@ -561,10 +561,9 @@ if __name__ == '__main__':
 
     stock.print_vol_table()
 
-    option = Option(strikePrice=91, optionPrice=1.04, daysUntilExpiration=15, optionType='put')
-    print stock.comp_option_prob(92.69, option, 251, use_drift=True)
+    option = Option(strikePrice=200, optionPrice=4.04, daysUntilExpiration=15, optionType='put')
+    print (stock.comp_option_prob(92.69, option, 251, use_drift=True))
 
-    print stock.comp_BSM_iv(92.69, option, rfir=0.0225)
-    print stock.comp_BSM_td(92.69, option, rfir=0.0225)
-    print stock.comp_BSM_delta(92.69, option, rfir=0.0225)
-
+    print (stock.comp_BSM_iv(92.69, option, rfir=0.0225))
+    print (stock.comp_BSM_td(92.69, option, rfir=0.0225))
+    print (stock.comp_BSM_delta(92.69, option, rfir=0.0225))
